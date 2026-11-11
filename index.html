@@ -48,7 +48,7 @@
     h1 em{font-style:normal;color:var(--green)}
     .hero-title{position:relative;transition:filter .25s ease}
     .hero-title-wrap{position:relative}
-    .hero-code{position:relative;display:flex;align-items:center;gap:8px;min-height:20px;margin:0 0 15px;padding:4px 9px;width:max-content;max-width:100%;border:1px solid rgba(195,255,92,.18);border-radius:6px;background:rgba(12,17,13,.74);font:10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:#a7b7a7;opacity:0;transform:translateY(5px);transition:opacity .25s ease,transform .25s ease}
+    .hero-code{position:absolute;left:0;top:-32px;display:flex;align-items:center;gap:8px;min-height:20px;margin:0;padding:4px 9px;width:max-content;max-width:100%;border:1px solid rgba(195,255,92,.18);border-radius:6px;background:rgba(12,17,13,.74);font:10px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:#a7b7a7;opacity:0;transform:translateY(5px);transition:opacity .25s ease,transform .25s ease}
     .intro-ready .hero-code{opacity:1;transform:none}
     .intro-ready .hero-title{opacity:0;filter:blur(3px);transform:translateY(3px)}
     .intro-morphing .hero-title{opacity:1;filter:none;transform:none;transition:opacity .16s ease,filter .16s ease,transform .16s ease}
@@ -56,8 +56,9 @@
     .hero-code .prompt{color:var(--green)}.hero-code .typed{color:#d9e4d9}.hero-code .caret{display:inline-block;width:6px;height:11px;background:var(--green);animation:blink .8s steps(2,start) infinite}
     @keyframes blink{to{visibility:hidden}}
     .headline-line{display:block;min-height:1em}
-    .morph-char{display:inline-block;white-space:pre;will-change:transform,opacity}
-    .intro-pending .eyebrow,.intro-pending .hero-copy,.intro-pending .actions,.intro-pending .showcase{opacity:0;transform:translateY(12px)}
+    .morph-word{display:inline-block;white-space:nowrap}.morph-char{display:inline-block;white-space:pre;will-change:transform,opacity}
+    .intro-pending .header nav,.intro-pending .eyebrow,.intro-pending .hero-copy,.intro-pending .actions,.intro-pending .showcase,.intro-pending .scroll-guide,.intro-pending .wa-float{opacity:0;transform:translateY(12px)}
+    .intro-complete .header nav,.intro-complete .scroll-guide,.intro-complete .wa-float{animation:copyArrive .4s .12s both cubic-bezier(.2,.8,.2,1)}
     .intro-complete .eyebrow{animation:copyArrive .36s .03s both cubic-bezier(.2,.8,.2,1)}
     .intro-complete .hero-title{animation:copyArrive .42s .08s both cubic-bezier(.2,.8,.2,1)}
     @keyframes copyArrive{from{opacity:0;transform:translateY(12px);filter:blur(2px)}to{opacity:1;transform:none;filter:blur(0)}}
@@ -68,7 +69,7 @@
     .intro-complete .hero-copy,.intro-complete .actions,.intro-complete .showcase{opacity:1;transform:none}
     .intro-complete .actions{transition-delay:.12s}.intro-complete .showcase{transition-delay:.14s}
     .morph-char.is-scrambling{color:var(--green);text-shadow:0 0 10px rgba(195,255,92,.25)}
-    .layout-cursor{position:fixed;left:0;top:0;z-index:30;pointer-events:none;display:flex;align-items:flex-start;gap:6px;opacity:0;transform:translate3d(-100px,-100px,0);transition:opacity .2s ease,transform .55s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 4px 10px #0008)}
+    .layout-cursor{position:fixed;left:0;top:0;z-index:30;pointer-events:none;display:flex;align-items:flex-start;gap:6px;opacity:0;transform:translate3d(-100px,-100px,0);transition:opacity .2s ease,transform .22s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 4px 10px #0008)}
     .layout-cursor.active{opacity:1}
     .layout-cursor svg{width:19px;height:23px;flex:none;overflow:visible}
     .layout-cursor-label{margin:14px 0 0 -4px;padding:4px 7px;border-radius:5px;background:#c3ff5c;color:#10150d;font:700 9px/1.2 ui-monospace,monospace;white-space:nowrap}
@@ -260,13 +261,18 @@
     const heroTitle=document.querySelector('.hero-title');
     const codeLine=document.querySelector('.hero-code .typed');
     root.classList.add('intro-pending');
+    setTimeout(()=>{if(root.classList.contains('intro-pending')){root.classList.remove('intro-pending','intro-ready','intro-morphing');root.classList.add('intro-complete');}},4000);
     const randomChars='{}[]<>/\\=+*01';
     const morphNodes=[...heroTitle.querySelectorAll('[data-morph]')];
     let glyphs=[];
     morphNodes.forEach(node=>{
       const text=node.textContent; node.textContent=''; node.setAttribute('aria-hidden','true');
-      [...text].forEach(char=>{
-        const span=document.createElement('span');span.className='morph-char';span.dataset.final=char;span.textContent=char===' '?'\u00a0':char;node.appendChild(span);glyphs.push(span);
+      text.split(/(\s+)/).forEach(part=>{
+        if(!part)return;
+        if(/^\s+$/.test(part)){node.appendChild(document.createTextNode(part));return;}
+        const word=document.createElement('span');word.className='morph-word';
+        [...part].forEach(char=>{const span=document.createElement('span');span.className='morph-char';span.dataset.final=char;span.textContent=char;word.appendChild(span);glyphs.push(span);});
+        node.appendChild(word);
       });
     });
     const code='const site = "sua ideia";';
@@ -316,7 +322,7 @@
         designCursor.style.transform=`translate3d(${Math.min(window.innerWidth-170,Math.max(8,r.left+Math.min(r.width*.55,180)))}px,${Math.min(window.innerHeight-40,Math.max(8,r.top+Math.min(15,r.height*.25)))}px,0)`;
         designCursor.classList.add('active');
         const svg=designCursor.querySelector('svg');svg.classList.remove('cursor-tap');void svg.offsetWidth;svg.classList.add('cursor-tap');
-        cursorTimer=setTimeout(visit,150);
+        cursorTimer=setTimeout(visit,220);
       };
       cursorTimer=setTimeout(visit,90);
     }),{threshold:.16});
