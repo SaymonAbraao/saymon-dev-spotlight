@@ -69,12 +69,6 @@
     .intro-complete .hero-copy,.intro-complete .actions,.intro-complete .showcase{opacity:1;transform:none}
     .intro-complete .actions{transition-delay:.12s}.intro-complete .showcase{transition-delay:.14s}
     .morph-char.is-scrambling{color:var(--green);text-shadow:0 0 10px rgba(195,255,92,.25)}
-    .layout-cursor{position:fixed;left:0;top:0;z-index:30;pointer-events:none;display:flex;align-items:flex-start;gap:6px;opacity:0;transform:translate3d(-100px,-100px,0);transition:opacity .2s ease,transform .22s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 4px 10px #0008)}
-    .layout-cursor.active{opacity:1}
-    .layout-cursor svg{width:19px;height:23px;flex:none;overflow:visible}
-    .layout-cursor-label{margin:14px 0 0 -4px;padding:4px 7px;border-radius:5px;background:#c3ff5c;color:#10150d;font:700 9px/1.2 ui-monospace,monospace;white-space:nowrap}
-    .cursor-tap{animation:cursorTap .22s ease}
-    @keyframes cursorTap{50%{transform:scale(.84)}}
     .scroll-guide{position:absolute;right:5px;bottom:16px;color:#849083;font:9px ui-monospace,monospace;letter-spacing:.08em;writing-mode:vertical-rl;opacity:.65}
     .scroll-guide::before{content:"";display:inline-block;width:1px;height:27px;margin-bottom:8px;background:linear-gradient(var(--green),transparent)}
     .hero-copy{max-width:520px;color:#abb5ac;font-size:17px;line-height:1.75;margin:0}
@@ -170,17 +164,8 @@
     .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step{padding:24px;background:#0e1410;border:1px solid var(--line);border-radius:var(--radius)}.step-num{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.1em}.step h3{font-size:17px;margin:18px 0 6px}.step p,.faq p{font-size:14px;line-height:1.75;color:var(--muted);margin:0}
     .faq{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.faq details{padding:18px 20px;background:#0e1410;border:1px solid var(--line);border-radius:14px}.faq summary{cursor:pointer;font-weight:650;font-size:14px}.faq details[open] p{margin-top:12px}
     .wa-float{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#c3ff5c;color:#0c1607;box-shadow:0 8px 30px #000a;z-index:10}.wa-float svg{width:26px;height:26px}
-    .js-ready .reveal{opacity:0;transform:translateY(18px);filter:blur(3px);transition:opacity .48s ease,transform .58s cubic-bezier(.2,.8,.2,1),filter .48s ease}.js-ready .reveal.visible{opacity:1;transform:none;filter:blur(0)}
-    .js-ready .reveal h2,.js-ready .reveal .section-intro,.js-ready .reveal .kicker{opacity:0;transform:translateY(8px);transition:opacity .36s ease,transform .42s cubic-bezier(.2,.8,.2,1)}
-    .js-ready .reveal.visible h2,.js-ready .reveal.visible .section-intro,.js-ready .reveal.visible .kicker{opacity:1;transform:none;transition-delay:.1s}
-    .js-ready .reveal .service,.js-ready .reveal .demo-card,.js-ready .reveal .step,.js-ready .reveal .faq details{opacity:0;transform:translateY(14px) scale(.985);transition:opacity .38s ease,transform .48s cubic-bezier(.2,.8,.2,1)}
-    .js-ready .reveal.visible .service,.js-ready .reveal.visible .demo-card,.js-ready .reveal.visible .step,.js-ready .reveal.visible .faq details{opacity:1;transform:none}
-    .js-ready .reveal.visible .service:nth-child(2),.js-ready .reveal.visible .demo-card:nth-child(2),.js-ready .reveal.visible .step:nth-child(2),.js-ready .reveal.visible .faq details:nth-child(2){transition-delay:.07s}
-    .js-ready .reveal.visible .service:nth-child(3),.js-ready .reveal.visible .demo-card:nth-child(3),.js-ready .reveal.visible .step:nth-child(3),.js-ready .reveal.visible .faq details:nth-child(3){transition-delay:.14s}
-    .js-ready .reveal.visible .demo-card:nth-child(4),.js-ready .reveal.visible .faq details:nth-child(4){transition-delay:.21s}
     .stat{display:inline-flex;align-items:center;gap:12px;margin-bottom:18px}.stat strong{font-size:38px;line-height:1;letter-spacing:-.07em;color:var(--green)}.stat span{font-size:12px;color:var(--muted);line-height:1.35}
     @media(max-width:760px){.about-grid{grid-template-columns:minmax(0,1fr);gap:28px}.about-photo{width:min(100%,320px);aspect-ratio:1/1.08;object-position:50% 23%}.demo-grid,.steps,.faq{grid-template-columns:1fr}.demo-image{height:200px}.wa-float{width:52px;height:52px}.footer{padding-bottom:88px}}
-    @media(prefers-reduced-motion:reduce){.js-ready .reveal,.js-ready .service,.js-ready .demo-card,.js-ready .step,.js-ready .faq details,.js-ready .reveal h2,.js-ready .reveal .section-intro,.js-ready .reveal .kicker{opacity:1;transform:none;filter:none}.editor-preview{animation:none}.layout-cursor{display:none}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
 
     /* Scroll-driven construction preview: all progress is owned by one scrubbed timeline. */
@@ -273,11 +258,6 @@
   const light=document.querySelector('.cursor-light');
   // Edit this ordered list to choose what the cursor constructs and the code it types.
   const BUILD_STEPS=[
-    {selector:'.hero .eyebrow',name:'etiqueta',code:'<span class="eyebrow">Desenvolvimento web</span>'},
-    {selector:'.hero .hero-title',name:'título',code:'<h1>Seu negócio, com presença digital</h1>'},
-    {selector:'.hero .hero-copy',name:'texto',code:'<p>Sites modernos para pequenos negócios</p>'},
-    {selector:'.hero .actions',name:'botões',code:'<a class="button">Vamos conversar</a>'},
-    {selector:'.hero .code-card',name:'prévia',code:'<section class="preview">\n  seu-negocio.dev\n</section>'},
     {selector:'#servicos .section-head',name:'serviços',code:'<h2>Soluções digitais</h2>'},
     {selector:'#servicos .service',name:'card de serviço',code:'<article class="service">\n  Solução digital\n</article>',all:true},
     {selector:'#projetos .section-head',name:'portfólio',code:'<h2>Ideias que ganham vida</h2>'},
@@ -293,7 +273,7 @@
     {selector:'#contato .contact-inner',name:'contato',code:'<section class="contact">\n  Vamos conversar\n</section>'}
   ];
   // More scroll distance means slower construction; 0.16 is the base share of viewport per step.
-  const BUILD_SPEED=1;
+  const BUILD_SPEED=1.35;
   const MOBILE=matchMedia('(max-width:760px)');
   let trigger=null,overlay=null,resizeObserver=null;
   const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
@@ -304,7 +284,7 @@
     overlay?.remove();overlay=null;resizeObserver?.disconnect();resizeObserver=null;
   };
   function init(){
-    if(!window.gsap||!window.ScrollTrigger||reduced.matches)return;
+    if(!window.gsap||!window.ScrollTrigger||reduced.matches||MOBILE.matches)return;
     window.gsap.registerPlugin(window.ScrollTrigger);
     const targets=[];
     BUILD_STEPS.forEach((step,stepIndex)=>{
@@ -312,8 +292,13 @@
       (step.all?nodes:nodes.slice(0,1)).forEach((el,nodeIndex)=>{el.classList.add('build-target');targets.push({el,step,stepIndex,nodeIndex,count:step.all?nodes.length:1,start:0,end:0})});
     });
     if(!targets.length)return;
+    // The hero remains readable on arrival; construction begins as the user scrolls into services.
+    const heroTargets=targets.filter(t=>t.el.closest('.hero'));
+    heroTargets.forEach(t=>t.el.classList.remove('build-target'));
+    for(let i=targets.length-1;i>=0;i--)if(targets[i].el.closest('.hero'))targets.splice(i,1);
+    if(!targets.length)return;
     const ns='http://www.w3.org/2000/svg';
-    overlay=document.createElementNS(ns,'svg');overlay.classList.add('construction-overlay');overlay.setAttribute('aria-hidden','true');overlay.setAttribute('preserveAspectRatio','none');document.body.appendChild(overlay);
+    overlay=document.createElementNS(ns,'svg');overlay.classList.add('construction-overlay');overlay.setAttribute('aria-hidden','true');overlay.setAttribute('preserveAspectRatio','none');overlay.setAttribute('viewBox',`0 0 ${innerWidth} ${innerHeight}`);overlay.setAttribute('width',innerWidth);overlay.setAttribute('height',innerHeight);document.body.appendChild(overlay);
     overlay.innerHTML=`<rect class="construction-code-bg" x="16" y="16" width="440" height="42" rx="7"/><text class="construction-code-prompt" x="27" y="42" font-family="monospace" font-size="11">$</text><text class="construction-code" x="40" y="42"></text><line class="construction-guide guide-x"/><line class="construction-guide guide-y"/><rect class="construction-outline" rx="5"/><g class="handles"></g><g class="construction-cursor"><path d="M2 2 21 18l-8 .7L9 26 2 2Z" fill="#c3ff5c" stroke="#10150d" stroke-width="1.7" stroke-linejoin="round"/><rect x="25" y="13" width="92" height="19" rx="4" fill="#c3ff5c"/><text class="construction-label" x="31" y="26"></text></g>`;
     const rect=overlay.querySelector('.construction-outline'),handles=overlay.querySelector('.handles'),cursor=overlay.querySelector('.construction-cursor'),label=overlay.querySelector('.construction-label'),code=overlay.querySelector('.construction-code'),codeBg=overlay.querySelector('.construction-code-bg'),guides=[overlay.querySelector('.guide-x'),overlay.querySelector('.guide-y')],dots=[];
     for(let i=0;i<8;i++){const dot=document.createElementNS(ns,'circle');dot.setAttribute('r','3.5');dot.setAttribute('class','construction-handle');handles.appendChild(dot);dots.push(dot)}
@@ -325,7 +310,7 @@
     const viewport=()=>{overlay.setAttribute('viewBox',`0 0 ${innerWidth} ${innerHeight}`);overlay.setAttribute('width',innerWidth);overlay.setAttribute('height',innerHeight)};
     function plan(){
       viewport();const vh=innerHeight,range=Math.max(1,document.documentElement.scrollHeight-vh);let previous=0;
-      const baseSpan=Math.max(64,vh*.16*BUILD_SPEED),gap=Math.max(10,vh*.025);
+      const baseSpan=Math.max(100,vh*.21*BUILD_SPEED),gap=Math.max(18,vh*.04);
       targets.forEach((t,i)=>{const b=t.el.getBoundingClientRect(),raw=Math.max(0,b.top+scrollY-vh*.72);t.start=Math.max(raw,previous+(i?gap:0));t.end=t.start+baseSpan;previous=t.end});
       // Compress only if necessary so the last steps remain reachable before the page ends.
       if(previous>range){const factor=range/previous;targets.forEach(t=>{t.start*=factor;t.end*=factor})}
@@ -364,9 +349,8 @@
     const driver={value:0};
     const makeTrigger=()=>{
       if(trigger)trigger.kill();
-      const scrollRange=Math.max(1,document.documentElement.scrollHeight-innerHeight);
-      const timeline=window.gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:document.documentElement,start:'top top',end:()=>`+=${Math.max(1,document.documentElement.scrollHeight-innerHeight)}`,scrub:true,invalidateOnRefresh:true,onRefresh:()=>{plan();render()},onUpdate:self=>render(self.progress*(document.documentElement.scrollHeight-innerHeight))}});
-      timeline.to(driver,{value:1,duration:1,ease:'none',onUpdate:()=>render(driver.value*scrollRange)});trigger=timeline.scrollTrigger;
+      const timeline=window.gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:document.documentElement,start:'top top',end:()=>`+=${Math.max(1,document.documentElement.scrollHeight-innerHeight)}`,scrub:true,invalidateOnRefresh:true,onRefresh:()=>{plan();render()},onUpdate:self=>render(self.progress*Math.max(1,document.documentElement.scrollHeight-innerHeight))}});
+      timeline.to(driver,{value:1,duration:1,ease:'none',onUpdate:()=>render(driver.value*Math.max(1,document.documentElement.scrollHeight-innerHeight))});trigger=timeline.scrollTrigger;
     };
     makeTrigger();
     if('ResizeObserver'in window){resizeObserver=new ResizeObserver(()=>{plan();window.ScrollTrigger.refresh()});targets.forEach(t=>resizeObserver.observe(t.el))}
@@ -374,7 +358,7 @@
     window.addEventListener('load',()=>{plan();window.ScrollTrigger.refresh()},{once:true});
     document.fonts?.ready.then(()=>{plan();window.ScrollTrigger.refresh()});
   }
-  if(!reduced.matches){
+  if(!reduced.matches&&!MOBILE.matches){
     const a=document.createElement('script');a.src='https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js';a.async=true;
     a.onload=()=>{const b=document.createElement('script');b.src='https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js';b.async=true;b.onload=()=>{try{init()}catch(error){console.error('Construction animation unavailable',error);showAll()}};b.onerror=showAll;document.head.appendChild(b)};a.onerror=showAll;document.head.appendChild(a)
   }
@@ -382,6 +366,7 @@
   const tilt=document.querySelector('.code-card');if(tilt){tilt.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||reduced.matches)return;const r=tilt.getBoundingClientRect(),ry=((e.clientX-r.left)/r.width-.5)*9,rx=(.5-(e.clientY-r.top)/r.height)*9;tilt.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`});tilt.addEventListener('pointerleave',()=>tilt.style.transform='')}
   window.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||!light||reduced.matches)return;document.documentElement.style.setProperty('--grid-x',`${(e.clientX/innerWidth-.5)*8}px`);document.documentElement.style.setProperty('--grid-y',`${(e.clientY/innerHeight-.5)*8}px`);light.style.opacity='1';light.style.transform=`translate3d(${e.clientX-140}px,${e.clientY-140}px,0)`},{passive:true});
   reduced.addEventListener?.('change',()=>{if(reduced.matches)showAll()});
+  MOBILE.addEventListener?.('change',()=>{if(MOBILE.matches)showAll();else if(!reduced.matches)location.reload()});
 })();
 </script>
 </body>
