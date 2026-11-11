@@ -285,18 +285,13 @@
     overlay?.remove();overlay=null;resizeObserver?.disconnect();resizeObserver=null;
   };
   function init(){
-    if(!window.gsap||!window.ScrollTrigger||reduced.matches||MOBILE.matches)return;
+    if(!window.gsap||!window.ScrollTrigger||reduced.matches)return;
     window.gsap.registerPlugin(window.ScrollTrigger);
     const targets=[];
     ACTIVE_STEPS.forEach((step,stepIndex)=>{
       const nodes=[...document.querySelectorAll(step.selector)];
       (step.all?nodes:nodes.slice(0,1)).forEach((el,nodeIndex)=>{el.classList.add('build-target');targets.push({el,step,stepIndex,nodeIndex,count:step.all?nodes.length:1,start:0,end:0})});
     });
-    if(!targets.length)return;
-    // The hero remains readable on arrival; construction begins as the user scrolls into services.
-    const heroTargets=targets.filter(t=>t.el.closest('.hero'));
-    heroTargets.forEach(t=>t.el.classList.remove('build-target'));
-    for(let i=targets.length-1;i>=0;i--)if(targets[i].el.closest('.hero'))targets.splice(i,1);
     if(!targets.length)return;
     const ns='http://www.w3.org/2000/svg';
     overlay=document.createElementNS(ns,'svg');overlay.classList.add('construction-overlay');overlay.setAttribute('aria-hidden','true');overlay.setAttribute('preserveAspectRatio','none');overlay.setAttribute('viewBox',`0 0 ${innerWidth} ${innerHeight}`);overlay.setAttribute('width',innerWidth);overlay.setAttribute('height',innerHeight);document.body.appendChild(overlay);
