@@ -338,7 +338,7 @@
         const raw=(scroll-t.start)/(t.end-t.start),p=clamp(raw);
         const reveal=clamp((p-.82)/.18);
         /* Unreached content stays readable; during the active step it is built in sync; completed stays visible. */
-        if(raw>0&&raw<1){t.el.style.opacity=String(reveal);t.el.style.visibility='visible'}
+        if(raw>0&&raw<1){t.el.style.opacity=String(MOBILE.matches?.42+.58*reveal:reveal);t.el.style.visibility='visible'}
         else{t.el.style.opacity='1';t.el.style.visibility='visible'}
         if(!active&&raw>=0&&raw<1)active={t,p};
       }
@@ -355,7 +355,7 @@
       const resize=ease(clamp((p-drawEnd)/(resizeEnd-drawEnd)));
       const scale=.90+.10*resize,shown={x:r.x,y:r.y,w:r.w*scale,h:r.h*scale};
       rect.setAttribute('x',shown.x);rect.setAttribute('y',shown.y);rect.setAttribute('width',shown.w);rect.setAttribute('height',shown.h);
-      const perimeter=2*(shown.w+shown.h),drawProgress=clamp((p-clickEnd)/(drawEnd-clickEnd));
+      const perimeter=2*(shown.w+shown.h),drawProgress=drag;
       rect.setAttribute('stroke-dasharray',`${perimeter} ${perimeter}`);rect.setAttribute('stroke-dashoffset',String(perimeter*(1-drawProgress)));
       rect.setAttribute('opacity',p>=clickStart&&p<.985?String(1-reveal*.9):'0');drawHandles(shown);
       handles.setAttribute('opacity',p>=drawEnd&&p<.98?String((1-reveal)*clamp((p-drawEnd)/.06)):0);
