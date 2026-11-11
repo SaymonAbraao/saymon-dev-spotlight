@@ -74,7 +74,12 @@
     .service-icon{width:39px;height:39px;display:grid;place-items:center;color:var(--green);border:1px solid #34422e;border-radius:11px;margin-bottom:22px;background:rgba(182,255,74,.045)}
     .service-icon svg{width:19px;height:19px}
     .service h3{font-size:16px;margin:0 0 8px;letter-spacing:-.02em}.service p{font-size:13px;color:var(--muted);line-height:1.7;margin:0}
-    .about-grid{display:grid;grid-template-columns:.76fr 1.24fr;gap:60px;align-items:start}
+    .about-grid{display:grid;grid-template-columns:300px 1fr;gap:54px;align-items:center}
+    .about-photo{width:100%;aspect-ratio:4/4.6;object-fit:cover;object-position:50% 28%;border-radius:20px;border:1px solid #354038;box-shadow:0 20px 60px #0008,0 0 30px rgba(195,255,92,.08)}
+    .about-copy{max-width:740px}.about-copy .stat{margin:0 0 18px}
+    .complex-cta{margin-top:24px;padding:22px;border:1px solid #35442f;border-radius:16px;background:linear-gradient(130deg,rgba(195,255,92,.08),rgba(12,16,13,.9))}
+    .complex-cta h3{font-size:17px;margin:0 0 7px}.complex-cta p{margin:0;color:var(--muted);font-size:13px}
+    .complex-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.complex-actions .button{min-height:44px}
     .about-note{border-left:2px solid var(--green);padding:7px 0 7px 20px;color:#d4ddd5;font-size:16px;line-height:1.8}
     .about-note strong{color:var(--green);font-weight:650}
     .about-text{color:var(--muted);font-size:14px;line-height:1.9;max-width:690px;margin:0}
@@ -116,7 +121,7 @@
     body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;background-image:repeating-radial-gradient(circle at 14% 18%,#fff 0 .5px,transparent .7px 4px);background-size:7px 7px}
     .js-ready .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}.js-ready .reveal.visible{opacity:1;transform:none}
     .stat{display:inline-flex;align-items:center;gap:12px;margin-bottom:18px}.stat strong{font-size:38px;line-height:1;letter-spacing:-.07em;color:var(--green)}.stat span{font-size:12px;color:var(--muted);line-height:1.35}
-    @media(max-width:760px){.demo-grid,.steps,.faq{grid-template-columns:1fr}.demo-image{height:200px}.wa-float{width:52px;height:52px}.footer{padding-bottom:88px}}
+    @media(max-width:760px){.about-grid{grid-template-columns:minmax(0,1fr);gap:28px}.about-photo{width:min(100%,320px);aspect-ratio:1/1.08;object-position:50% 23%}.demo-grid,.steps,.faq{grid-template-columns:1fr}.demo-image{height:200px}.wa-float{width:52px;height:52px}.footer{padding-bottom:88px}}
     @media(prefers-reduced-motion:reduce){.js-ready .reveal{opacity:1;transform:none}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
   </style>
@@ -169,9 +174,14 @@
     </div></section>
     <section class="section" id="como-funciona" aria-labelledby="steps-title"><div class="wrap reveal"><div class="section-head"><div><p class="kicker">Simples e direto</p><h2 id="steps-title">Como funciona.</h2></div><p class="section-intro">Cada projeto tem seu ritmo. Prazo, investimento e escopo são combinados após entender sua necessidade.</p></div><div class="steps"><article class="step"><span class="step-num">01 / CONVERSA</span><h3>Entender sua ideia</h3><p>Conversamos sobre seu negócio, suas necessidades e os objetivos do site.</p></article><article class="step"><span class="step-num">02 / CRIAÇÃO</span><h3>Construir juntos</h3><p>Preparo a página e alinhamos os detalhes de conteúdo e visual.</p></article><article class="step"><span class="step-num">03 / ENTREGA</span><h3>Seu site no ar</h3><p>Com tudo aprovado, organizamos a publicação e a entrega do projeto.</p></article></div></div></section>
     <section class="section" id="sobre" aria-labelledby="about-title">
-      <div class="wrap about-grid">
-        <div><p class="kicker">Um pouco sobre mim</p><h2 id="about-title">Tecnologia com<br>olhar de negócio.</h2></div>
-        <div><div class="stat"><strong data-count="15">15+</strong><span>anos de atuação<br>da SIS-H</span></div><div class="about-note">Também trabalho na <strong>SIS-H</strong>, empresa sólida com mais de 15 anos de atuação no mercado de sistemas hospitalares e ambulatoriais.</div><p class="about-text" style="margin-top:21px">Essa experiência me aproxima de sistemas e necessidades reais do dia a dia das empresas. No saymon.dev, quero ajudar barbearias e pequenos negócios a terem uma presença digital profissional, com soluções objetivas e um visual feito com cuidado.</p></div>
+      <div class="wrap about-grid reveal">
+        <img class="about-photo" src="saymon-rezende.webp" alt="Saymon em seu ambiente de desenvolvimento web" loading="lazy" width="868" height="1024">
+        <div class="about-copy"><p class="kicker">Um pouco sobre mim</p><h2 id="about-title">Tecnologia com<br>olhar de negócio.</h2>
+          <div class="stat"><strong data-count="15">15+</strong><span>anos de atuação<br>da SIS-H</span></div>
+          <div class="about-note">Também trabalho na <strong>SIS-H</strong>, empresa sólida com mais de 15 anos de atuação no mercado de sistemas hospitalares e ambulatoriais.</div>
+          <p class="about-text" style="margin-top:21px">Essa experiência me aproxima de sistemas e necessidades reais do dia a dia das empresas. No saymon.dev, ajudo barbearias e pequenos negócios a terem uma presença digital profissional, com soluções objetivas e um visual feito com cuidado.</p>
+          <div class="complex-cta"><h3>Precisa de algo mais complexo?</h3><p>Se você busca um sistema personalizado além dos exemplos do portfólio, fale comigo pelo WhatsApp ou agende uma reunião.</p><div class="complex-actions"><a class="button button-primary" href="https://wa.me/5534984139192?text=Oi%20Saymon%2C%20preciso%20conversar%20sobre%20um%20sistema%20mais%20complexo" target="_blank" rel="noopener noreferrer">Conversar no WhatsApp <span aria-hidden="true">↗</span></a><a class="button button-secondary" href="https://app.meuassessor.com/agenda/compartilhada/lbEGYB0C2YGRdY6aUgcR5A" target="_blank" rel="noopener noreferrer">Agendar uma reunião <span aria-hidden="true">↗</span></a></div></div>
+        </div>
       </div>
     </section>
     <section class="section" aria-labelledby="faq-title"><div class="wrap reveal"><div class="section-head"><div><p class="kicker">Antes de começar</p><h2 id="faq-title">Perguntas frequentes.</h2></div></div><div class="faq"><details><summary>Qual é o prazo de entrega?</summary><p>Depende do projeto, da disponibilidade dos materiais e das revisões. Combinamos um prazo depois da conversa inicial.</p></details><details><summary>Quanto custa um site?</summary><p>O valor varia conforme o que você precisa. Me conte sua ideia para receber um orçamento.</p></details><details><summary>Preciso de domínio e hospedagem?</summary><p>Para publicar um site, geralmente é necessária hospedagem; um domínio próprio é opcional e costuma ter custo separado. Podemos avaliar a melhor opção juntos.</p></details><details><summary>O site precisa de manutenção?</summary><p>Depende dos recursos e das alterações que você quiser fazer após a entrega. As condições de suporte e manutenção são combinadas no orçamento.</p></details></div></div></section>
