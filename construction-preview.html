@@ -275,6 +275,7 @@
   // More scroll distance means slower construction; 0.16 is the base share of viewport per step.
   const BUILD_SPEED=1.35;
   const MOBILE=matchMedia('(max-width:760px)');
+  const ACTIVE_STEPS=MOBILE.matches?BUILD_STEPS.filter(step=>!step.all):BUILD_STEPS;
   let trigger=null,overlay=null,resizeObserver=null;
   const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
   const showAll=()=>{
@@ -287,7 +288,7 @@
     if(!window.gsap||!window.ScrollTrigger||reduced.matches||MOBILE.matches)return;
     window.gsap.registerPlugin(window.ScrollTrigger);
     const targets=[];
-    BUILD_STEPS.forEach((step,stepIndex)=>{
+    ACTIVE_STEPS.forEach((step,stepIndex)=>{
       const nodes=[...document.querySelectorAll(step.selector)];
       (step.all?nodes:nodes.slice(0,1)).forEach((el,nodeIndex)=>{el.classList.add('build-target');targets.push({el,step,stepIndex,nodeIndex,count:step.all?nodes.length:1,start:0,end:0})});
     });
@@ -310,18 +311,22 @@
     const viewport=()=>{overlay.setAttribute('viewBox',`0 0 ${innerWidth} ${innerHeight}`);overlay.setAttribute('width',innerWidth);overlay.setAttribute('height',innerHeight)};
     function plan(){
       viewport();const vh=innerHeight,range=Math.max(1,document.documentElement.scrollHeight-vh);let previous=0;
-      const baseSpan=Math.max(100,vh*.21*BUILD_SPEED),gap=Math.max(18,vh*.04);
+      const baseSpan=Math.max(64,vh*.16*BUILD_SPEED),gap=Math.max(10,vh*.025);
       targets.forEach((t,i)=>{const b=t.el.getBoundingClientRect(),raw=Math.max(0,b.top+scrollY-vh*.72);t.start=Math.max(raw,previous+(i?gap:0));t.end=t.start+baseSpan;previous=t.end});
-      // Compress only if necessary so the last steps remain reachable before the page ends.
-      if(previous>range){const factor=range/previous;targets.forEach(t=>{t.start*=factor;t.end*=factor})}
+      // If the sequence exceeds document scroll range, shorten each construction in order; never overlap steps.
+      if(previous>range){const available=Math.max(1,range-targets[0].start),factor=Math.min(1,available/Math.max(1,previous-targets[0].start));let cursor=targets[0].start;targets.forEach((t,i)=>{if(i){const raw=Math.max(0,t.el.getBoundingClientRect().top+scrollY-vh*.72);t.start=Math.max(raw,cursor+gap*factor)}t.end=t.start+baseSpan*factor;cursor=t.end});
+        if(cursor>range){const shrink=Math.max(.12,range/Math.max(1,cursor));let at=targets[0].start;targets.forEach((t,i)=>{if(i)t.start=at+gap*shrink;t.end=t.start+baseSpan*shrink;at=t.end})}
+      }
     }
     function render(scroll=scrollY){
       const vh=innerHeight;let active=null;
       for(const t of targets){
-        const p=clamp((scroll-t.start)/(t.end-t.start));
-        const startReveal=.84,reveal=clamp((p-startReveal)/(1-startReveal));
-        t.el.style.opacity=String(reveal);t.el.style.visibility=reveal>0?'visible':'hidden';
-        if(!active&&p<1&&scroll>=t.start&&scroll<=t.end)active={t,p};
+        const raw=(scroll-t.start)/(t.end-t.start),p=clamp(raw);
+        const reveal=clamp((p-.82)/.18);
+        /* Unreached content stays readable; during the active step it is built in sync; completed stays visible. */
+        if(raw>0&&raw<1){t.el.style.opacity=String(reveal);t.el.style.visibility='visible'}
+        else{t.el.style.opacity='1';t.el.style.visibility='visible'}
+        if(!active&&raw>=0&&raw<1)active={t,p};
       }
       if(!active){rect.setAttribute('opacity','0');handles.setAttribute('opacity','0');guides.forEach(g=>g.setAttribute('opacity','0'));placeCursor(-120,-120,0);codeBg.setAttribute('opacity','0');return}
       const {t,p}=active,r=coords(t.el),index=targets.indexOf(t),prev=index?coords(targets[index-1].el):{x:30,y:vh*.7,w:0,h:0};
@@ -339,10 +344,19 @@
       rect.setAttribute('opacity',p>=clickStart&&p<.985?String(1-reveal*.9):'0');drawHandles(shown);
       handles.setAttribute('opacity',p>=drawEnd&&p<.98?String((1-reveal)*clamp((p-drawEnd)/.06)):0);
       const g=clamp((p-.70)/.1)*(1-clamp((p-.94)/.04));guides[0].setAttribute('x1',r.x+r.w/2);guides[0].setAttribute('x2',r.x+r.w/2);guides[0].setAttribute('y1',0);guides[0].setAttribute('y2',vh);guides[1].setAttribute('x1',0);guides[1].setAttribute('x2',innerWidth);guides[1].setAttribute('y1',r.y+r.h/2);guides[1].setAttribute('y2',r.y+r.h/2);guides.forEach(gd=>gd.setAttribute('opacity',g));
-      let cx=cx0,cy=cy0;if(p>=clickStart&&p<clickEnd){cx=r.x;cy=r.y} else if(p>=clickEnd&&p<drawEnd){cx=r.x+r.w*drag;cy=r.y+r.h*drag}else if(p>=drawEnd){cx=r.x+r.w;cy=r.y+r.h}
+      let cx=cx0,cy=cy0;
+      if(p>=clickStart&&p<clickEnd){cx=r.x;cy=r.y}
+      else if(p>=clickEnd&&p<drawEnd){
+        /* Trace the same clockwise perimeter being drawn by stroke-dashoffset. */
+        const distance=drag*2*(shown.w+shown.h),w=shown.w,h=shown.h;
+        if(distance<=w){cx=shown.x+distance;cy=shown.y}
+        else if(distance<=w+h){cx=shown.x+w;cy=shown.y+(distance-w)}
+        else if(distance<=2*w+h){cx=shown.x+w-(distance-w-h);cy=shown.y+h}
+        else{cx=shown.x;cy=shown.y+h-(distance-2*w-h)}
+      }else if(p>=drawEnd){cx=shown.x+shown.w;cy=shown.y+shown.h}
       const pulse=p>=clickStart&&p<clickEnd?Math.sin(click*Math.PI):0;placeCursor(cx,cy,p<.995?1:0,1-pulse*.14);
-      label.textContent=`${t.step.name} · ${t.count>1?`${t.nodeIndex+1}/${t.count}`:`${t.stepIndex+1}/${BUILD_STEPS.length}`}`;
-      const chars=Math.floor(t.step.code.length*clamp((p-.08)/.72));code.textContent=t.step.code.slice(0,chars)+(p<.80?'▍':'');codeBg.setAttribute('opacity',p<.995?'.96':'0');
+      label.textContent=`${t.step.name} · ${t.count>1?`${t.nodeIndex+1}/${t.count}`:`${t.stepIndex+1}/${ACTIVE_STEPS.length}`}`;
+      const snippet=MOBILE.matches?t.step.code.replace(/\s+/g,' ').slice(0,34):t.step.code;const chars=Math.floor(snippet.length*clamp((p-.06)/.70));code.textContent=snippet.slice(0,chars)+(p<.76?'▍':'');codeBg.setAttribute('opacity',p<.995?'.96':'0');
     }
     root.classList.add('construction-ready');
     plan();render();
@@ -358,7 +372,7 @@
     window.addEventListener('load',()=>{plan();window.ScrollTrigger.refresh()},{once:true});
     document.fonts?.ready.then(()=>{plan();window.ScrollTrigger.refresh()});
   }
-  if(!reduced.matches&&!MOBILE.matches){
+  if(!reduced.matches){
     const a=document.createElement('script');a.src='https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js';a.async=true;
     a.onload=()=>{const b=document.createElement('script');b.src='https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js';b.async=true;b.onload=()=>{try{init()}catch(error){console.error('Construction animation unavailable',error);showAll()}};b.onerror=showAll;document.head.appendChild(b)};a.onerror=showAll;document.head.appendChild(a)
   }
@@ -366,7 +380,7 @@
   const tilt=document.querySelector('.code-card');if(tilt){tilt.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||reduced.matches)return;const r=tilt.getBoundingClientRect(),ry=((e.clientX-r.left)/r.width-.5)*9,rx=(.5-(e.clientY-r.top)/r.height)*9;tilt.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`});tilt.addEventListener('pointerleave',()=>tilt.style.transform='')}
   window.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||!light||reduced.matches)return;document.documentElement.style.setProperty('--grid-x',`${(e.clientX/innerWidth-.5)*8}px`);document.documentElement.style.setProperty('--grid-y',`${(e.clientY/innerHeight-.5)*8}px`);light.style.opacity='1';light.style.transform=`translate3d(${e.clientX-140}px,${e.clientY-140}px,0)`},{passive:true});
   reduced.addEventListener?.('change',()=>{if(reduced.matches)showAll()});
-  MOBILE.addEventListener?.('change',()=>{if(MOBILE.matches)showAll();else if(!reduced.matches)location.reload()});
+  MOBILE.addEventListener?.('change',()=>{if(!reduced.matches)location.reload()});
 })();
 </script>
 </body>
