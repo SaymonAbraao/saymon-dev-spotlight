@@ -19,18 +19,19 @@
   <meta name="apple-mobile-web-app-title" content="Saymon.dev">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <style>
-    :root{color-scheme:dark;--bg:#080b09;--surface:#0e1310;--surface-hi:#121a15;--line:#202a23;--text:#f3f7f3;--muted:#a0aaa2;--green:#c3ff5c;--green2:#84bd20;--max:1120px;--radius:22px}
+    :root{color-scheme:dark;--bg:#080b09;--surface:#0e1310;--surface-hi:#121a15;--line:#202a23;--text:#f3f7f3;--muted:#a0aaa2;--green:#c3ff5c;--green2:#84bd20;--max:1600px;--radius:22px}
     *{box-sizing:border-box}
     html{scroll-behavior:smooth;scroll-padding-top:90px}
     body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6;overflow-x:hidden}
     body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 52% 38% at 79% 14%,rgba(91,167,37,.12),transparent 70%),radial-gradient(ellipse 40% 33% at 3% 78%,rgba(73,145,49,.08),transparent 70%)}
-    .cursor-light{position:fixed;left:0;top:0;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(195,255,92,.15) 0%,rgba(195,255,92,.07) 35%,rgba(195,255,92,0) 70%);filter:blur(25px);pointer-events:none;z-index:0;opacity:0;transition:opacity .35s ease;will-change:transform;transform:translate3d(-1000px,-1000px,0)}
+    .cursor-light{position:fixed;left:0;top:0;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(195,255,92,.15) 0%,rgba(195,255,92,.07) 35%,rgba(195,255,92,0) 70%);filter:blur(25px);pointer-events:none;z-index:0;opacity:0;transition:opacity .35s ease;will-change:transform;transform:translate3d(-1000px,-1000px,0)}
     body>header,body>main,body>footer{position:relative;z-index:1}
     @media (hover:none),(pointer:coarse),(any-pointer:coarse),(prefers-reduced-motion:reduce){.cursor-light{display:none}}
     a{color:inherit;text-decoration:none}
     a:focus-visible{outline:2px solid var(--green);outline-offset:5px;border-radius:5px}
-    .wrap{width:min(calc(100% - 40px),var(--max));margin-inline:auto}
-    .header{height:78px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07)}
+    .wrap{width:min(calc(100% - clamp(40px, 5vw, 96px)),var(--max));margin-inline:auto}
+    .header-shell{width:100%;border-bottom:1px solid rgba(255,255,255,.08)}
+    .header{height:78px;display:flex;align-items:center;justify-content:space-between}
     .brand{display:inline-flex;align-items:center;gap:10px;font-weight:750;letter-spacing:-.045em;font-size:20px}
     .brand-mark{width:28px;height:28px;border-radius:8px;background:#080b09;color:#f4f6f2;display:grid;place-items:center;font-size:20px;font-weight:900;line-height:1;letter-spacing:-.1em;position:relative;box-shadow:0 0 18px rgba(195,255,92,.13)}
     .brand-mark::after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:var(--green);right:3px;bottom:4px}
@@ -67,7 +68,7 @@
     .kicker{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--green);font-weight:750;margin:0 0 10px}
     h2{font-size:clamp(30px,4vw,44px);letter-spacing:-.06em;line-height:1.1;margin:0}
     .section-intro{max-width:400px;color:var(--muted);font-size:14px;margin:0}
-    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .services{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:14px}
     .service{min-height:222px;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(145deg,rgba(17,23,19,.95),rgba(12,16,13,.9));transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
     .service:hover{transform:translateY(-4px);border-color:#536d3e;box-shadow:0 14px 40px rgba(86,147,45,.08),0 0 25px rgba(182,255,74,.05)}
     .service-icon{width:39px;height:39px;display:grid;place-items:center;color:var(--green);border:1px solid #34422e;border-radius:11px;margin-bottom:22px;background:rgba(182,255,74,.045)}
@@ -83,22 +84,44 @@
     .socials{display:flex;gap:18px;flex-wrap:wrap}.socials a{transition:color .2s ease}.socials a:hover{color:var(--green)}
     @media(max-width:760px){.wrap{width:min(calc(100% - 32px),var(--max))}.header{height:68px}nav{gap:16px}nav a:not(.nav-cta){display:none}.hero{grid-template-columns:1fr;gap:15px;min-height:0;padding:82px 0 58px}.hero-copy{font-size:15px}.showcase{min-height:300px;margin-top:8px}.code-card{max-width:350px}.section{padding:60px 0}.section-head{display:block}.section-intro{margin-top:14px}.services{grid-template-columns:1fr}.service{min-height:0;padding:21px}.service-icon{margin-bottom:16px}.about-grid{grid-template-columns:1fr;gap:25px}.contact{padding:25px}.contact-inner{align-items:flex-start;flex-direction:column}.footer{align-items:flex-start;flex-direction:column}}
     @media(max-width:390px){h1{font-size:46px}.actions .button{width:100%}.floating-tag{right:0;bottom:18px}.header .brand{font-size:18px}}
+
+    .service,.demo-card,.step{position:relative;overflow:hidden}
+    .service::after,.demo-card::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:radial-gradient(240px circle at var(--mx,-500px) var(--my,-500px),rgba(195,255,92,.55),transparent 75%);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask-composite:exclude;pointer-events:none;opacity:0;transition:opacity .2s}
+    .service:hover::after,.demo-card:hover::after{opacity:1}
+    .service:first-child{background:radial-gradient(circle at 95% 5%,rgba(195,255,92,.11),transparent 55%),linear-gradient(145deg,#131b14,#0c100d)}
+    .demo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .demo-card{display:block;border:1px solid var(--line);border-radius:var(--radius);background:#0e1410;transition:border-color .2s,transform .2s;overflow:hidden}
+    .demo-card:hover{transform:translateY(-4px);border-color:#536d3e}
+    .demo-image{height:230px;display:grid;place-items:center;padding:28px;overflow:hidden;background:radial-gradient(circle at 70% 30%,#353329,#151916 70%)}
+    .demo-image.menu-image{background:radial-gradient(circle at 70% 20%,#4c2921,#191410 75%)}
+    .demo-window{width:min(92%,360px);height:175px;border:1px solid #ffffff22;border-radius:8px;background:#121310;color:#f9f4e9;padding:16px 22px;box-shadow:0 20px 40px #0008;transform:rotate(-2deg)}
+    .menu-image .demo-window{background:#f6ead5;color:#39231a;transform:rotate(2deg)}
+    .demo-window small{font-size:9px;letter-spacing:.16em;text-transform:uppercase}.demo-window b{display:block;font-family:Georgia,serif;font-size:28px;line-height:1.1;margin-top:17px}.demo-window span{display:block;font-size:10px;margin-top:10px;opacity:.75}.demo-window i{display:inline-block;background:#cab18a;color:#15120f;font-style:normal;font-size:9px;padding:6px 9px;border-radius:3px;margin-top:14px}.menu-image .demo-window i{background:#8a3522;color:#fff}
+    .demo-info{padding:22px}.demo-meta{font-size:11px;color:var(--green);letter-spacing:.1em;text-transform:uppercase}.demo-info h3{font-size:20px;margin:8px 0 4px;letter-spacing:-.03em}.demo-info p{font-size:13px;color:var(--muted);margin:0}.demo-link{display:inline-block;margin-top:16px;color:var(--green);font-weight:700;font-size:13px}
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.step{padding:24px;background:#0e1410;border:1px solid var(--line);border-radius:var(--radius)}.step-num{color:var(--green);font-size:12px;font-weight:800;letter-spacing:.1em}.step h3{font-size:17px;margin:18px 0 6px}.step p,.faq p{font-size:14px;line-height:1.75;color:var(--muted);margin:0}
+    .faq{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.faq details{padding:18px 20px;background:#0e1410;border:1px solid var(--line);border-radius:14px}.faq summary{cursor:pointer;font-weight:650;font-size:14px}.faq details[open] p{margin-top:12px}
+    .wa-float{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#c3ff5c;color:#0c1607;box-shadow:0 8px 30px #000a;z-index:10}.wa-float svg{width:26px;height:26px}
+    body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;background-image:repeating-radial-gradient(circle at 14% 18%,#fff 0 .5px,transparent .7px 4px);background-size:7px 7px}
+    .js-ready .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}.js-ready .reveal.visible{opacity:1;transform:none}
+    .stat{display:inline-flex;align-items:center;gap:12px;margin-bottom:18px}.stat strong{font-size:38px;line-height:1;letter-spacing:-.07em;color:var(--green)}.stat span{font-size:12px;color:var(--muted);line-height:1.35}
+    @media(max-width:760px){.demo-grid,.steps,.faq{grid-template-columns:1fr}.demo-image{height:200px}.wa-float{width:52px;height:52px}.footer{padding-bottom:88px}}
+    @media(prefers-reduced-motion:reduce){.js-ready .reveal{opacity:1;transform:none}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
   </style>
 </head>
 <body>
   <div class="cursor-light" aria-hidden="true"></div>
-  <header class="wrap header">
+  <header class="header-shell"><div class="wrap header">
     <a class="brand" href="#inicio" aria-label="Saymon.dev — início"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-name">saymon<span>.dev</span></span></a>
-    <nav aria-label="Navegação principal"><a href="#servicos">Serviços</a><a href="#sobre">Sobre</a><a class="nav-cta" href="#contato">Fale comigo <span aria-hidden="true">↗</span></a></nav>
-  </header>
+    <nav aria-label="Navegação principal"><a href="#servicos">Serviços</a><a href="#projetos">Projetos</a><a href="#sobre">Sobre</a><a class="nav-cta" href="#contato">Fale comigo <span aria-hidden="true">↗</span></a></nav>
+  </div></header>
   <main>
     <section class="wrap hero" id="inicio" aria-labelledby="main-title">
       <div>
         <div class="eyebrow"><span class="dot" aria-hidden="true"></span> Desenvolvimento web para negócios</div>
         <h1 id="main-title">Seu negócio,<br>com presença <em>digital.</em></h1>
         <p class="hero-copy">Crio sites modernos e cardápios online para barbearias e pequenas empresas que querem mostrar seu trabalho e facilitar o contato com clientes.</p>
-        <div class="actions"><a class="button button-primary" href="https://wa.me/5534984139192" target="_blank" rel="noopener noreferrer">Vamos conversar <span class="arrow" aria-hidden="true">↗</span></a><a class="button button-secondary" href="#servicos">Conheça os serviços <span class="arrow" aria-hidden="true">↓</span></a></div>
+        <div class="actions"><a class="button button-primary" href="https://wa.me/5534984139192?text=Oi%20Saymon%2C%20vi%20seu%20site%20e%20quero%20um%20or%C3%A7amento" target="_blank" rel="noopener noreferrer">Vamos conversar <span class="arrow" aria-hidden="true">↗</span></a><a class="button button-secondary" href="#servicos">Conheça os serviços <span class="arrow" aria-hidden="true">↓</span></a></div>
       </div>
       <div class="showcase" aria-label="Prévia ilustrativa de um site para negócio local">
         <div class="orb" aria-hidden="true"></div>
@@ -122,20 +145,44 @@
         </div>
       </div>
     </section>
+
+    <section class="section" id="projetos" aria-labelledby="projects-title"><div class="wrap reveal">
+      <div class="section-head"><div><p class="kicker">Veja na prática</p><h2 id="projects-title">Ideias que ganham<br>vida na tela.</h2></div><p class="section-intro">Explore dois exemplos criados para demonstrar como seu negócio pode se apresentar na internet. São demonstrações fictícias, não projetos de clientes.</p></div>
+      <div class="demo-grid">
+        <a class="demo-card" href="barbearia.html"><div class="demo-image" aria-hidden="true"><div class="demo-window"><small>Estúdio 01 · barbearia</small><b>Seu estilo.<br>Seu momento.</b><span>Cortes e cuidado para o seu dia a dia.</span><i>Conheça os serviços</i></div></div><div class="demo-info"><span class="demo-meta">Demonstração · barbearia</span><h3>Presença que marca.</h3><p>Uma vitrine elegante para apresentar serviços e facilitar o contato.</p><span class="demo-link">Abrir demonstração ↗</span></div></a>
+        <a class="demo-card" href="cardapio.html"><div class="demo-image menu-image" aria-hidden="true"><div class="demo-window"><small>Cozinha da Vila · menu</small><b>O sabor da<br>boa comida.</b><span>Um cardápio simples, bonito e fácil de explorar.</span><i>Ver cardápio</i></div></div><div class="demo-info"><span class="demo-meta">Demonstração · cardápio</span><h3>O sabor, em destaque.</h3><p>Um cardápio online pensado para ser acessado pelo celular.</p><span class="demo-link">Abrir demonstração ↗</span></div></a>
+      </div>
+    </div></section>
+    <section class="section" id="como-funciona" aria-labelledby="steps-title"><div class="wrap reveal"><div class="section-head"><div><p class="kicker">Simples e direto</p><h2 id="steps-title">Como funciona.</h2></div><p class="section-intro">Cada projeto tem seu ritmo. Prazo, investimento e escopo são combinados após entender sua necessidade.</p></div><div class="steps"><article class="step"><span class="step-num">01 / CONVERSA</span><h3>Entender sua ideia</h3><p>Conversamos sobre seu negócio, suas necessidades e os objetivos do site.</p></article><article class="step"><span class="step-num">02 / CRIAÇÃO</span><h3>Construir juntos</h3><p>Preparo a página e alinhamos os detalhes de conteúdo e visual.</p></article><article class="step"><span class="step-num">03 / ENTREGA</span><h3>Seu site no ar</h3><p>Com tudo aprovado, organizamos a publicação e a entrega do projeto.</p></article></div></div></section>
     <section class="section" id="sobre" aria-labelledby="about-title">
       <div class="wrap about-grid">
         <div><p class="kicker">Um pouco sobre mim</p><h2 id="about-title">Tecnologia com<br>olhar de negócio.</h2></div>
-        <div><div class="about-note">Também trabalho na <strong>SIS-H</strong>, empresa sólida com mais de 15 anos de atuação no mercado de sistemas hospitalares e ambulatoriais.</div><p class="about-text" style="margin-top:21px">Essa experiência me aproxima de sistemas e necessidades reais do dia a dia das empresas. No saymon.dev, quero ajudar barbearias e pequenos negócios a terem uma presença digital profissional, com soluções objetivas e um visual feito com cuidado.</p></div>
+        <div><div class="stat"><strong data-count="15">15+</strong><span>anos de atuação<br>da SIS-H</span></div><div class="about-note">Também trabalho na <strong>SIS-H</strong>, empresa sólida com mais de 15 anos de atuação no mercado de sistemas hospitalares e ambulatoriais.</div><p class="about-text" style="margin-top:21px">Essa experiência me aproxima de sistemas e necessidades reais do dia a dia das empresas. No saymon.dev, quero ajudar barbearias e pequenos negócios a terem uma presença digital profissional, com soluções objetivas e um visual feito com cuidado.</p></div>
       </div>
     </section>
+    <section class="section" aria-labelledby="faq-title"><div class="wrap reveal"><div class="section-head"><div><p class="kicker">Antes de começar</p><h2 id="faq-title">Perguntas frequentes.</h2></div></div><div class="faq"><details><summary>Qual é o prazo de entrega?</summary><p>Depende do projeto, da disponibilidade dos materiais e das revisões. Combinamos um prazo depois da conversa inicial.</p></details><details><summary>Quanto custa um site?</summary><p>O valor varia conforme o que você precisa. Me conte sua ideia para receber um orçamento.</p></details><details><summary>Preciso de domínio e hospedagem?</summary><p>Para publicar um site, geralmente é necessária hospedagem; um domínio próprio é opcional e costuma ter custo separado. Podemos avaliar a melhor opção juntos.</p></details><details><summary>O site precisa de manutenção?</summary><p>Depende dos recursos e das alterações que você quiser fazer após a entrega. As condições de suporte e manutenção são combinadas no orçamento.</p></details></div></div></section>
     <section class="section" id="contato" aria-labelledby="contact-title">
-      <div class="wrap contact"><div class="contact-inner"><div><p class="kicker">Vamos tirar a ideia do papel?</p><h2 id="contact-title">Me conta sobre<br>o seu negócio.</h2><p>Chama no WhatsApp e vamos conversar sobre o que você precisa.</p></div><a class="button button-primary" href="https://wa.me/5534984139192" target="_blank" rel="noopener noreferrer">Falar no WhatsApp <span class="arrow" aria-hidden="true">↗</span></a></div></div>
+      <div class="wrap contact"><div class="contact-inner"><div><p class="kicker">Vamos tirar a ideia do papel?</p><h2 id="contact-title">Me conta sobre<br>o seu negócio.</h2><p>Chama no WhatsApp e vamos conversar sobre o que você precisa.</p></div><a class="button button-primary" href="https://wa.me/5534984139192?text=Oi%20Saymon%2C%20vi%20seu%20site%20e%20quero%20um%20or%C3%A7amento" target="_blank" rel="noopener noreferrer">Falar no WhatsApp <span class="arrow" aria-hidden="true">↗</span></a></div></div>
     </section>
   </main>
-  <footer class="wrap footer"><a class="brand" href="#inicio" aria-label="Voltar ao início"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-name">saymon<span>.dev</span></span></a><div class="socials" aria-label="Redes sociais"><a href="https://www.instagram.com/saymon_rezende/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://x.com/SaymonR25514" target="_blank" rel="noopener noreferrer">X / Twitter</a><a href="https://www.linkedin.com/in/saymon-rezende-836a86383/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://wa.me/5534984139192" target="_blank" rel="noopener noreferrer">WhatsApp</a></div><span>© Saymon.dev</span></footer>
+  <footer class="wrap footer"><a class="brand" href="#inicio" aria-label="Voltar ao início"><span class="brand-mark" aria-hidden="true">S</span><span class="brand-name">saymon<span>.dev</span></span></a><div class="socials" aria-label="Redes sociais"><a href="https://www.instagram.com/saymon_rezende/" target="_blank" rel="noopener noreferrer">Instagram</a><a href="https://x.com/SaymonR25514" target="_blank" rel="noopener noreferrer">X / Twitter</a><a href="https://www.linkedin.com/in/saymon-rezende-836a86383/" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://wa.me/5534984139192?text=Oi%20Saymon%2C%20vi%20seu%20site%20e%20quero%20um%20or%C3%A7amento" target="_blank" rel="noopener noreferrer">WhatsApp</a></div><span>© Saymon.dev</span></footer>
+<a class="wa-float" href="https://wa.me/5534984139192?text=Oi%20Saymon%2C%20vi%20seu%20site%20e%20quero%20um%20or%C3%A7amento" target="_blank" rel="noopener noreferrer" aria-label="Pedir orçamento pelo WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.58 14.85L2 22l5.28-1.39A9.95 9.95 0 1 0 12.04 2Zm0 18.07a8.1 8.1 0 0 1-4.13-1.13l-.3-.18-3.13.82.84-3.04-.2-.31a8.1 8.1 0 1 1 6.92 3.84Zm4.46-6.07c-.25-.13-1.47-.73-1.7-.81-.23-.09-.4-.13-.57.13s-.65.8-.8.97c-.14.17-.29.19-.54.07-.25-.13-1.05-.39-2-1.24-.75-.67-1.25-1.49-1.4-1.74-.14-.25-.01-.39.11-.51.12-.11.25-.29.38-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.57-1.37-.78-1.88-.21-.5-.42-.43-.57-.44h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.43 1.02 2.6c.13.17 1.77 2.71 4.3 3.8.6.26 1.07.42 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.17.2-.57.2-1.05.14-1.16-.06-.1-.23-.17-.48-.29Z"/></svg></a>
 <script>
 (() => {
   const light = document.querySelector('.cursor-light');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if ('IntersectionObserver' in window && !reduced.matches) {
+    document.documentElement.classList.add('js-ready');
+    const observer = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }), {threshold:.08});
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    const stat = document.querySelector('[data-count]');
+    const statObserver = new IntersectionObserver(entries => entries.forEach(e => { if (!e.isIntersecting) return; const start = performance.now(); function count(t) { const progress = Math.min((t-start)/800,1); stat.textContent = Math.round(15 * progress) + '+'; if (progress < 1) requestAnimationFrame(count); } requestAnimationFrame(count); statObserver.disconnect(); }), {threshold:.5});
+    statObserver.observe(stat);
+  }
+  document.querySelectorAll('.service,.demo-card').forEach(card => card.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || reduced.matches) return; const r=card.getBoundingClientRect(); card.style.setProperty('--mx', (e.clientX-r.left)+'px'); card.style.setProperty('--my', (e.clientY-r.top)+'px'); }, {passive:true}));
+  const tilt = document.querySelector('.code-card');
+  tilt.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse' || reduced.matches) return; const r=tilt.getBoundingClientRect(); const ry=((e.clientX-r.left)/r.width-.5)*6; const rx=(.5-(e.clientY-r.top)/r.height)*6; tilt.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`; });
+  tilt.addEventListener('pointerleave', () => { tilt.style.transform = ''; });
   const capability = window.matchMedia('(hover: hover) and (pointer: fine) and (any-pointer: fine) and (prefers-reduced-motion: no-preference)');
   const touch = window.matchMedia('(any-pointer: coarse)');
   let x = 0, y = 0, targetX = 0, targetY = 0, frame = 0, initialized = false;
@@ -143,7 +190,7 @@
   function render() {
     x += (targetX - x) * 0.12;
     y += (targetY - y) * 0.12;
-    light.style.transform = `translate3d(${x - 200}px, ${y - 200}px, 0)`;
+    light.style.transform = `translate3d(${x - 140}px, ${y - 140}px, 0)`;
     if (Math.abs(targetX - x) + Math.abs(targetY - y) > 0.2) frame = requestAnimationFrame(render);
     else frame = 0;
   }
