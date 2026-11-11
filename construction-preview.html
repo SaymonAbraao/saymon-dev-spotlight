@@ -288,7 +288,9 @@
   let destroyed = false;
 
   const showAll = () => {
+    if (trigger) { try { trigger.kill(true); } catch (_) {} trigger = null; }
     root.classList.remove('construction-ready');
+    BUILD_STEPS.forEach(step => { const el = document.querySelector(step.target); if (el) { el.style.removeProperty('opacity'); el.style.removeProperty('visibility'); } });
     document.querySelectorAll('.construction-overlay').forEach(el => el.remove());
   };
   const valid = () => window.gsap && window.ScrollTrigger && scene && BUILD_STEPS.every(s => document.querySelector(s.target));
